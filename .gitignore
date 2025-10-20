@@ -205,3 +205,55 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# --- Fichiers Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# --- Environnements virtuels ---
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Fichiers de configuration utilisateur ---
+*.log
+*.bak
+*.swp
+*.tmp
+
+# --- Notebooks Jupyter ---
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# --- Données temporaires ou locales ---
+*.csv
+*.json
+!datasets/*.json    # garde les JSON officiels du dossier datasets
+data/
+output/
+results/
+tmp/
+cache/
+
+# --- IDE et éditeurs ---
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# --- OS spécifiques ---
+.DS_Store
+Thumbs.db
+
+# --- Fichiers de tests automatiques ---
+*.pytest_cache/
+.pytest_cache/
+.coverage
+htmlcov/
