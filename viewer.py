@@ -85,4 +85,6 @@ def viewer(input_file, solution_file):
     slider.on_changed(update)
     plt.show()
     
-viewer("./datasets/1_example.json", "./solutions/1_example_submission.txt")
+# viewer("./datasets/1_example.json", "./solutions/1_example_submission.txt")
+
+viewer("./datasets/1_example.json", "./solutions/1_example_2010.txt")
