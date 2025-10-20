@@ -1,7 +1,7 @@
 import json
 import math
 
-SUBMISSION_FILE = 'solutions/1_example_submission.txt'
+SUBMISSION_FILE = 'solutions/1_example_best_1.txt'
 DATASET_FILE = 'datasets/1_example.json'
 
 def get_solution_score(solution_txt, dataset_txt):
