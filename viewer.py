@@ -87,4 +87,4 @@ def viewer(input_file, solution_file):
     
 # viewer("./datasets/1_example.json", "./solutions/1_example_submission.txt")
 
-viewer("./datasets/1_example.json", "./solutions/1_example_2010.txt")
+viewer("./datasets/2_invader.json", "./solutions/2.txt")
