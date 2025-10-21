@@ -1,8 +1,19 @@
 import json
 import math
 
-SUBMISSION_FILE = 'solutions/1_example_best_1.txt'
-DATASET_FILE = 'datasets/1_example.json'
+# SUBMISSION_FILE = 'solutions/1_example_best_1.txt'
+SUBMISSION_FILE = 'solutions/2_invader_best_1.txt'
+# SUBMISSION_FILE = 'solutions/3_mchat.txt'
+# SUBMISSION_FILE = 'solutions/4_pacman.txt'
+# SUBMISSION_FILE = 'solutions/5_banksy.txt'
+# SUBMISSION_FILE = 'solutions/6_wplace.txt'
+
+# DATASET_FILE = 'datasets/1_example.json'
+DATASET_FILE = 'datasets/2_invader.json'
+# DATASET_FILE = 'datasets/3_mchat.json'
+# DATASET_FILE = 'datasets/4_pacman.json'
+# DATASET_FILE = 'datasets/5_banksy.json'
+# DATASET_FILE = 'datasets/6_wplace.json'
 
 def get_solution_score(solution_txt, dataset_txt):
     """Evaluate the solution and return a tuple (score, isValid, error_message).
