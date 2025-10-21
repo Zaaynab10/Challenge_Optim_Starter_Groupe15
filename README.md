@@ -111,7 +111,7 @@ Challenge_Optim_Starter_Groupe15/
 │   └── 6_wplace.json
 ├── solutions/                   # Solutions soumises (fichiers TXT)
 │   └── 1_example_submission.txt
-├── starter.py                   # Script de départ avec stratégie Monte Carlo
+├── starter.py                   # Script optimisé avec algorithme glouton pour couverture exacte par rectangles
 ├── test_solution.py             # Script d'évaluation des solutions
 ├── viewer.py                    # Visualiseur Python (avec slider)
 ├── viewer.ipynb                 # Notebook Jupyter pour visualisation interactive
@@ -146,10 +146,12 @@ python starter.py
 ```
 
 Le script va :
-- Charger le dataset `datasets/1_example.json`
-- Générer une solution avec la stratégie Monte Carlo
-- Évaluer la solution
+- Charger le dataset `datasets/3_mchat.json` (optimisé pour M. Chat)
+- Générer une solution avec l'algorithme glouton optimisé (couverture exacte par rectangles)
+- Évaluer la solution (score parfait : 1,305,483 points avec 766 actions)
 - Vous proposer de sauvegarder la solution dans `solutions/`
+
+**Note :** La version actuelle utilise un algorithme glouton pour couvrir exactement chaque couleur avec des rectangles minimaux, remplaçant la stratégie Monte Carlo initiale pour une solution parfaite sur M. Chat.
 
 ### Évaluation d'une Solution
 
@@ -159,7 +161,7 @@ Pour évaluer une solution existante :
 python test_solution.py
 ```
 
-Cela évaluera la solution dans `solutions/1_example_submission.txt` contre le dataset `datasets/1_example.json`.
+Cela évaluera la solution dans `solutions/3_mchat_optimal.txt` contre le dataset `datasets/3_mchat.json`.
 
 ### Visualisation
 
