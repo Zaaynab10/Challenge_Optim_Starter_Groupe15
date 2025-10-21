@@ -76,7 +76,7 @@ def solve(dataset_txt):
 
 
 if __name__ == '__main__':
-    dataset_file = "1_example"
+    dataset_file = "4_pacman"
     dataset = open(f'datasets/{dataset_file}.json').read()
 
     print('---------------------------------')
