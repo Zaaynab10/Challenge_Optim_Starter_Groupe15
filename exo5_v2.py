@@ -74,65 +74,6 @@ def solve(dataset_txt):
             ro += 1
         co += 1
 
-
-    co = 0
-    for ligne in target_grid :
-        ro = 0
-        for _ in ligne :
-            if target_grid[co][ro] == 1 and len(actions) != 5000:
-                # if [co, ro, 0] in coor :
-                if [co, ro] in coor :
-
-                    maxX = []
-                    aug = 1
-                    num = 0
-                    while target_grid[co][(ro + aug)] == 1 and [co, (ro + aug)] in coor :
-                        aug += 1
-                        num += 1
-                    maxX = [co, ro + num]
-
-                    maxY = []
-                    aug = 1
-                    num = 0
-                    while target_grid[co + aug][(ro)] == 1 and [co + aug, (ro)] in coor :
-                        aug += 1
-                        num += 1
-                    maxY = [co + num, ro]
-
-                    aug = 1
-                    num = 0
-                    while maxY[1] + num <= maxX[1] and target_grid[maxY[0]][ro + num] == 1 and [maxY[0], ro + num] in coor :
-                        aug += 1
-                        num += 1
-                    action = f'RECT {ro} {co} {ro + num} {maxY[0]} {1}'
-                    actions.append(action)
-                        
-                    roLog = ro
-                    while roLog != ro + num + 1 :
-                        coLog = co
-                        while coLog != maxY[0] + 1 :
-                            if [coLog, roLog] in coor :
-                                coor.remove([coLog, roLog])
-                                # coor.remove([coLog, roLog, 0])
-                                # coor.append([coLog, roLog, 1])
-                            coLog += 1
-                        roLog += 1
-            ro += 1
-        co += 1
-
-    
-    # noir = 0
-    # co = 0
-    # for ligne in target_grid :
-    #     ro = 0
-    #     for _ in ligne :
-    #         if target_grid[co][ro] == 0 :
-    #             noir += 1
-    #         ro += 1
-    #     co += 1
-    # print(noir)
-    # print(len(coor))
-
     co = 0
     for ligne in target_grid :
         ro = 0
@@ -208,8 +149,3 @@ if __name__ == '__main__':
             print('Solution saved')
         else:
             print('Solution not saved')
-
-
-#  and target_grid[co][(ro + aug)] in coor
-#  and target_grid[co + aug][(ro)] in coor
-#  and target_grid[maxY[0]][ro + num] in coor

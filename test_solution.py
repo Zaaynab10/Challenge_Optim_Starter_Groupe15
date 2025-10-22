@@ -4,15 +4,15 @@ import math
 # SUBMISSION_FILE = 'solutions/1_example_best.txt'
 # SUBMISSION_FILE = 'solutions/2_invader_best.txt'
 # SUBMISSION_FILE = 'solutions/3_mchat_779500_20251021_110724.txt'
-SUBMISSION_FILE = 'solutions/4_pacman_best.txt'
-# SUBMISSION_FILE = 'solutions/1_example_best.txt'
+# SUBMISSION_FILE = 'solutions/4_pacman_best.txt'
+SUBMISSION_FILE = 'solutions/5_banksy_best_incomplete.txt'
 # SUBMISSION_FILE = 'solutions/1_example_best.txt'
 
 # DATASET_FILE = 'datasets/1_example.json'
 # DATASET_FILE = 'datasets/2_invader.json'
 # DATASET_FILE = 'datasets/3_mchat.json'
-DATASET_FILE = 'datasets/4_pacman.json'
-# DATASET_FILE = 'datasets/5_banksy.json'
+# DATASET_FILE = 'datasets/4_pacman.json'
+DATASET_FILE = 'datasets/5_banksy.json'
 # DATASET_FILE = 'datasets/6_wplace.json'
 
 def get_solution_score(solution_txt, dataset_txt):
