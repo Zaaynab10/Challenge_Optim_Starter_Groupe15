@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 import matplotlib
 
-def solve_M_Chat_contour_optimal(dataset_txt):
+def solve_specific_contour(dataset_txt):
     """Contour bleu décomposé en formes géométriques optimales"""
     solution = """RECT 0 0 99 99 6
 # ÉTAPE 1: Carré central du visage
@@ -41,7 +41,7 @@ RECT 57 31 58 34 1"""
     
     return solution
 
-def solve_M_Chat_final_sans_commentaires(dataset_txt):
+def solve_greedy_rectangles(dataset_txt):
     """Version automatisée : analyse la grille et génère les rectangles optimaux pour couvrir exactement chaque couleur avec un algorithme glouton."""
     import json
 
@@ -184,7 +184,7 @@ def viewer(input_file, solution_file):
 
 # PROGRAMME PRINCIPAL
 if __name__ == '__main__':
-    dataset_name = "3_mchat"
+    dataset_name = "5_banksy"
     dataset_path = f'datasets/{dataset_name}.json'
     
     if not os.path.exists(dataset_path):
@@ -202,7 +202,7 @@ if __name__ == '__main__':
     
     # Teste la solution optimisée
     print("🎯 Test version optimisée (décomposition géométrique)")
-    solution = solve_M_Chat_final_sans_commentaires(dataset)
+    solution = solve_greedy_rectangles(dataset)
     
     # Teste la solution
     score, is_valid, message = test_solution.get_solution_score(solution, dataset)
