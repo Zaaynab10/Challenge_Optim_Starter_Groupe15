@@ -51,7 +51,7 @@ def solve(dataset_txt):
                         aug = 1
                         num = 0
 
-                        while maxY[1] + num <= maxX[1] and target_grid[maxY[0]][ro + num] == 0 :
+                        while maxY[1] + num <= maxX[1] and target_grid[maxY[0]][ro + aug] == 0 :
                             aug += 1
                             num += 1
                         action = f'RECT {ro} {co} {ro + num} {maxY[0]} {0}'
@@ -101,7 +101,7 @@ def solve(dataset_txt):
 
                     aug = 1
                     num = 0
-                    while maxY[1] + num <= maxX[1] and target_grid[maxY[0]][ro + num] == 1 and [maxY[0], ro + num] in coor :
+                    while maxY[1] + num <= maxX[1] and target_grid[maxY[0]][ro + aug] == 1 and [maxY[0], ro + num] in coor :
                         aug += 1
                         num += 1
                     action = f'RECT {ro} {co} {ro + num} {maxY[0]} {1}'

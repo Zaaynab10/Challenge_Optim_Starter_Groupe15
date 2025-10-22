@@ -32,35 +32,48 @@ def solve(dataset_txt):
                 if target_grid[co][(ro + 1)] == 0 or target_grid[(co + 1)][ro] == 0 :
                     # if [co, ro, 0] not in coor :
                     if [co, ro] not in coor :
-                        maxX = []
+                        maxX = ""
                         aug = 1
                         num = 0
                         while target_grid[co][(ro + aug)] == 0 :
                             aug += 1
                             num += 1
                             # coor.append([co, ro + num])
-                        maxX = [co, ro + num]
-                        maxY = []
+                        maxX = ro + num
+                        maxY = ""
                         aug = 1
                         num = 0
                         while target_grid[co + aug][(ro)] == 0 :
                             aug += 1
                             num += 1
                             # coor.append([co + num, ro])
-                        maxY = [co + num, ro]
+                        maxY = co + num
+
+                        # numX = 0
+                        # stop = False
+                        # while ro + numX <= maxX and stop == False :
+                        #     numY = 0
+                        #     while co + numY <= maxY and target_grid[co + numY][ro + numX] == 0 :
+                        #         numY += 1
+                            # if target_grid[co + numY][ro + numX] != 0 :
+                            #     stop == True
+                            # else :
+                            #     numX += 1
+
+#  and target_grid[maxY][ro + num] == 0
+
                         aug = 1
                         num = 0
-
-                        while maxY[1] + num <= maxX[1] and target_grid[maxY[0]][ro + num] == 0 :
+                        while maxY + num <= maxX and target_grid[maxY][ro + num] == 0 :
                             aug += 1
                             num += 1
-                        action = f'RECT {ro} {co} {ro + num} {maxY[0]} {0}'
+                        action = f'RECT {ro} {co} {ro + num} {maxY} {0}'
                         actions.append(action)
                         
                         roLog = ro
                         while roLog != ro + num + 1 :
                             coLog = co
-                            while coLog != maxY[0] + 1 :
+                            while coLog != maxY + 1 :
                                 # coor.append([coLog, roLog, 0])
                                 if [coLog, roLog] not in coor :
                                     coor.append([coLog, roLog])
