@@ -6,7 +6,6 @@ plt.figure(figsize=(12, 6))
 
 def plot_progress(scores, mean_scores, actions_taken):
     plt.clf() # Efface la figure actuelle
-    # plt.figure(figsize=(12, 6))
 
     # Graphique du score
     plt.subplot(1, 2, 1)
@@ -28,5 +27,4 @@ def plot_progress(scores, mean_scores, actions_taken):
     plt.grid(True)
 
     plt.tight_layout() # Ajuste l'espacement
-    # plt.show(block=False) # Affiche sans bloquer
     plt.pause(0.1) # Petite pause pour l'affichage

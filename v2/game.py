@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 from figure import Figure
-from collections import deque # Pour la fonction de composantes connexes
+from collections import deque
 import random
 
 
@@ -50,9 +50,7 @@ class GameEnv:
             self._clock = pygame.time.Clock()
 
         self.reset()
-        # NOUVEAU: Espace d'actions étendu
-        # (NUM_TOP_ZONES zones * (8 couleurs + 1 joker)) + 1 (pour NO_OP si aucune zone)
-        self.n_actions = NUM_TOP_ZONES * (len(COLOR_MAP) + 1) + 1 # +1 pour NO_OP
+        self.n_actions = NUM_TOP_ZONES * (len(COLOR_MAP) + 1) + 1
         self._zone_pool = []
 
 
@@ -201,7 +199,6 @@ class GameEnv:
             self._prepare_zone_pool()
         zone_pool = self._zone_pool
 
-        # NOUVEAU: Gérer l'action "NO_OP"
         if action_idx == self.n_actions - 1: # Si c'est la dernière action possible (NO_OP)
             if not zone_pool: # Si vraiment rien à faire
                 self._actions_history.append("NO_OP")
@@ -214,7 +211,6 @@ class GameEnv:
             self._actions_history.append("NO_OP_NO_ZONE")
             return "no_op" # Rien à colorier, mais ce n'est pas une action de l'agent
 
-        # NOUVEAU: Choisir la zone à cibler
         zone_action_space_size = len(COLOR_MAP) + 1 # 8 couleurs + 1 joker
         target_zone_idx = action_idx // zone_action_space_size
         color_or_joker_action = action_idx % zone_action_space_size

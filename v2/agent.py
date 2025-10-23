@@ -131,10 +131,10 @@ class DQNAgent:
     def load_model(self, file_name='dqn_model.pth'):
         """Charge le modèle principal."""
         self.model.load_state_dict(torch.load(file_name))
-        self.update_target_model() # Met à jour aussi le modèle cible
+        self.update_target_model()
 
 def train():
-    figure = Figure("../datasets/3_mchat.json")
+    figure = Figure("../datasets/1_example.json")
     game = GameEnv(figure, clone=False, show=False)
     state_size = game.get_state().shape[0]
     action_size = game.n_actions
@@ -159,7 +159,6 @@ def train():
             reward, game_over, score = game.play_step(final_action_idx)
             state_new = game.get_state()
  
-            # --- SUITE DU CODE ICI ---
             agent.train_short_memory(state_old, final_action_idx, reward, state_new, game_over)
  
             agent.remember(state_old, final_action_idx, reward, state_new, game_over)
@@ -181,16 +180,14 @@ def train():
         if score > record_score:
             record_score = score
             agent.save_model('./saves/best_model.pth')
-            # torch.save(agent.model.state_dict(), 'best_model.pth')
  
         print(f'Episode {episode}, Score: {score}, Record: {record_score}, Actions: {len(game._actions_history)}, Epsilon: {agent.epsilon:.2f}')
  
         plot_progress(scores, mean_scores, actions_taken_list)
  
-        if episode > 2000: # Tu peux ajuster ce nombre d'épisodes
+        if episode > 20000:
             print("Entraînement terminé.")
             break
  
-# --- Pour lancer l'entraînement ---
 if __name__ == '__main__':
     train()
