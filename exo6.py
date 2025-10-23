@@ -18,59 +18,509 @@ def solve(dataset_txt):
     actions = []
     jokers_used = 0
 
-    current_grid = [[0 for _ in range(grid_width)] for _ in range(grid_height)]
- 
-    # Exemple de solution: on cherche itérativement des actions qui améliorent le score (stratégie Monte Carlo)
-    while len(actions) < max_actions:
-        best_action = None
-        best_score_increase = 0
-        best_new_grid = None
+    coorNoir = []
+    coorBlanc = []
+    coorRouge = []
+    coorVert = []
+    coorJaune = []
+    coorRose = []
+    coorOrange = []
 
-        for _ in range(100):  # Nombre d'actions aléatoires à tester
-            action_type = 'RECT' if jokers_used >= max_jokers else random.choice(['RECT', 'JOKER'])
-            x1 = random.randint(0, grid_width - 1)
-            y1 = random.randint(0, grid_height - 1)
-            x2 = random.randint(x1, min(x1 + 10, grid_width - 1))
-            y2 = random.randint(y1, min(y1 + 10, grid_height - 1))
+    action = f'RECT 0 0 999 999 2'
+    actions.append(action)
 
-            if action_type == 'RECT':
-                color = random.randint(0, 7)
-                action = f'RECT {x1} {y1} {x2} {y2} {color}'
-            else:
-                if (x2 - x1 + 1) * (y2 - y1 + 1) > max_joker_size:
-                    continue  # Skip if the joker size exceeds the maximum allowed
-                action = f'JOKER {x1} {y1} {x2} {y2}'
-
-            # Simuler l'action et calculer l'augmentation du score
-            simulated_grid = [row[:] for row in current_grid]
-            if action.startswith('RECT '):
-                _, sx1, sy1, sx2, sy2, scolor = action.split()
-                sx1, sy1, sx2, sy2, scolor = map(int, (sx1, sy1, sx2, sy2, scolor))
-                for y in range(sy1, sy2 + 1):
-                    for x in range(sx1, sx2 + 1):
-                        simulated_grid[y][x] = scolor
-            elif action.startswith('JOKER '):
-                _, sx1, sy1, sx2, sy2 = action.split()
-                sx1, sy1, sx2, sy2 = map(int, (sx1, sy1, sx2, sy2))
-                for y in range(sy1, sy2 + 1):
-                    for x in range(sx1, sx2 + 1):
-                        simulated_grid[y][x] = target_grid[y][x]
-
-            current_score = sum(1 for y in range(grid_height) for x in range(grid_width) if simulated_grid[y][x] == target_grid[y][x])
-            score_increase = current_score - sum(1 for y in range(grid_height) for x in range(grid_width) if current_grid[y][x] == target_grid[y][x])
-
-            if score_increase > best_score_increase:
-                best_score_increase = score_increase
-                best_action = action
-                best_new_grid = simulated_grid
-
-        if best_action:
-            actions.append(best_action)
-            current_grid = best_new_grid
-            if best_action.startswith('JOKER '):
+    while jokers_used != 200 :
+        co = 0
+        while co + 9 != grid_height - 1 and jokers_used != 200 :
+            ro = 0
+            while ro + 9 != grid_height - 1 and jokers_used != 200 :
+                action = f'JOKER {ro} {co} {ro + 9} {co + 9}'
+                actions.append(action)
                 jokers_used += 1
-        else:
-            break
+                testCo = 133
+                while testCo <= 142 :
+                    testRo = 92
+                    while testRo <= 131 :
+                        if target_grid[testCo][testRo] == 0:
+                            coorNoir.append([testCo, testRo])
+                        elif target_grid[testCo][testRo] == 1:
+                            coorBlanc.append([testCo, testRo])
+                        elif target_grid[testCo][testRo] == 3:
+                            coorRouge.append([testCo, testRo])
+                        elif target_grid[testCo][testRo] == 4:
+                            coorVert.append([testCo, testRo])
+                        elif target_grid[testCo][testRo] == 5:
+                            coorJaune.append([testCo, testRo])
+                        elif target_grid[testCo][testRo] == 6:
+                            coorRose.append([testCo, testRo])
+                        elif target_grid[testCo][testRo] == 7:
+                            coorOrange.append([testCo, testRo])
+                        testRo += 1
+                    testCo += 1
+                ro += 10
+            co += 10
+
+    co = 0
+    for ligne in target_grid :
+        ro = 0
+        for _ in ligne :
+            if target_grid[co][ro] == 4 and len(actions) != 2000:
+                if [co, ro] not in coorVert :
+                    maxX = 0
+                    num = 0
+                    while ro + num != grid_width and target_grid[co][(ro + num)] not in [2]  :
+                        num += 1
+                    if num == 0 :
+                        maxX = ro + num
+                    else :
+                        maxX = ro + num - 1
+                    
+                    maxY = 0
+                    num = 0
+                    while co + num != grid_height and target_grid[co + num][(ro)] not in [2] :
+                        num += 1
+                    if num == 0 :
+                        maxY = co + num
+                    else :
+                        maxY = co + num - 1
+                    
+                    coorTemp = []
+                    testCo = co
+                    while testCo <= maxY :
+                        testRo = ro
+                        while testRo <= maxX :
+                            coorTemp.append([testCo, testRo])
+                            testRo += 1
+                        testCo += 1
+
+                    key = 0
+                    for elem in coorTemp :
+                        if target_grid[elem[0]][elem[1]] in [2] :
+                            if elem[0] != coorTemp[0][0] :
+                                keyDeux=0
+                                for elemDeux in coorTemp :
+                                    if elemDeux == [coorTemp[key][0] - 1, maxX] :
+                                        key = keyDeux
+                                        break
+                                    keyDeux += 1
+                                action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {4}'
+                                actions.append(action)
+                                break
+                            else :
+                                action = f'RECT {ro} {co} {coorTemp[key - 1][1]} {coorTemp[key - 1][0]} {4}'
+                                actions.append(action)
+                                key -= 1
+                                break
+                        elif coorTemp[len(coorTemp) - 1] == elem :
+                            action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {4}'
+                            actions.append(action)
+                            break
+                        key += 1
+
+                    keyLog = 0
+                    while keyLog <= key :
+                        if coorTemp[keyLog] not in coorVert and target_grid[coorTemp[keyLog][0]][coorTemp[keyLog][1]] == 4 :
+                            coorVert.append(coorTemp[keyLog])
+                        keyLog += 1
+                    
+            ro += 1
+        co += 1
+
+    co = 0
+    for ligne in target_grid :
+        ro = 0
+        for _ in ligne :
+            if target_grid[co][ro] == 1 and len(actions) != 2000:
+                if [co, ro] not in coorBlanc :
+                    maxX = 0
+                    num = 0
+                    while ro + num != grid_width and target_grid[co][(ro + num)] not in [2, 4]  :
+                        num += 1
+                    if num == 0 :
+                        maxX = ro + num
+                    else :
+                        maxX = ro + num - 1
+                    
+                    maxY = 0
+                    num = 0
+                    while co + num != grid_height and target_grid[co + num][(ro)] not in [2, 4] :
+                        num += 1
+                    if num == 0 :
+                        maxY = co + num
+                    else :
+                        maxY = co + num - 1
+                    
+                    coorTemp = []
+                    testCo = co
+                    while testCo <= maxY :
+                        testRo = ro
+                        while testRo <= maxX :
+                            coorTemp.append([testCo, testRo])
+                            testRo += 1
+                        testCo += 1
+
+                    key = 0
+                    for elem in coorTemp :
+                        if target_grid[elem[0]][elem[1]] in [2, 4] :
+                            if elem[0] != coorTemp[0][0] :
+                                keyDeux=0
+                                for elemDeux in coorTemp :
+                                    if elemDeux == [coorTemp[key][0] - 1, maxX] :
+                                        key = keyDeux
+                                        break
+                                    keyDeux += 1
+                                action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {1}'
+                                actions.append(action)
+                                break
+                            else :
+                                action = f'RECT {ro} {co} {coorTemp[key - 1][1]} {coorTemp[key - 1][0]} {1}'
+                                actions.append(action)
+                                key -= 1
+                                break
+                        elif coorTemp[len(coorTemp) - 1] == elem :
+                            action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {1}'
+                            actions.append(action)
+                            break
+                        key += 1
+
+                    keyLog = 0
+                    while keyLog <= key :
+                        if coorTemp[keyLog] not in coorBlanc and target_grid[coorTemp[keyLog][0]][coorTemp[keyLog][1]] == 1 :
+                            coorBlanc.append(coorTemp[keyLog])
+                        keyLog += 1
+                    
+            ro += 1
+        co += 1
+
+    co = 0
+    for ligne in target_grid :
+        ro = 0
+        for _ in ligne :
+            if target_grid[co][ro] == 3 and len(actions) != 2000:
+                if [co, ro] not in coorRouge :
+                    maxX = 0
+                    num = 0
+                    while ro + num != grid_width and target_grid[co][(ro + num)] not in [1, 2, 4]  :
+                        num += 1
+                    if num == 0 :
+                        maxX = ro + num
+                    else :
+                        maxX = ro + num - 1
+                    
+                    maxY = 0
+                    num = 0
+                    while co + num != grid_height and target_grid[co + num][(ro)] not in [1, 2, 4] :
+                        num += 1
+                    if num == 0 :
+                        maxY = co + num
+                    else :
+                        maxY = co + num - 1
+                    
+                    coorTemp = []
+                    testCo = co
+                    while testCo <= maxY :
+                        testRo = ro
+                        while testRo <= maxX :
+                            coorTemp.append([testCo, testRo])
+                            testRo += 1
+                        testCo += 1
+
+                    key = 0
+                    for elem in coorTemp :
+                        if target_grid[elem[0]][elem[1]] in [1, 2, 4] :
+                            if elem[0] != coorTemp[0][0] :
+                                keyDeux=0
+                                for elemDeux in coorTemp :
+                                    if elemDeux == [coorTemp[key][0] - 1, maxX] :
+                                        key = keyDeux
+                                        break
+                                    keyDeux += 1
+                                action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {3}'
+                                actions.append(action)
+                                break
+                            else :
+                                action = f'RECT {ro} {co} {coorTemp[key - 1][1]} {coorTemp[key - 1][0]} {3}'
+                                actions.append(action)
+                                key -= 1
+                                break
+                        elif coorTemp[len(coorTemp) - 1] == elem :
+                            action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {3}'
+                            actions.append(action)
+                            break
+                        key += 1
+
+                    keyLog = 0
+                    while keyLog <= key :
+                        if coorTemp[keyLog] not in coorRouge and target_grid[coorTemp[keyLog][0]][coorTemp[keyLog][1]] == 3 :
+                            coorRouge.append(coorTemp[keyLog])
+                        keyLog += 1
+                    
+            ro += 1
+        co += 1
+
+    co = 0
+    for ligne in target_grid :
+        ro = 0
+        for _ in ligne :
+            if target_grid[co][ro] == 0 and len(actions) != 2000:
+                if [co, ro] not in coorNoir :
+                    maxX = 0
+                    num = 0
+                    while ro + num != grid_width and target_grid[co][(ro + num)] not in [1, 2, 3, 4]  :
+                        num += 1
+                    if num == 0 :
+                        maxX = ro + num
+                    else :
+                        maxX = ro + num - 1
+                    
+                    maxY = 0
+                    num = 0
+                    while co + num != grid_height and target_grid[co + num][(ro)] not in [1, 2, 3, 4] :
+                        num += 1
+                    if num == 0 :
+                        maxY = co + num
+                    else :
+                        maxY = co + num - 1
+                    
+                    coorTemp = []
+                    testCo = co
+                    while testCo <= maxY :
+                        testRo = ro
+                        while testRo <= maxX :
+                            coorTemp.append([testCo, testRo])
+                            testRo += 1
+                        testCo += 1
+
+                    key = 0
+                    for elem in coorTemp :
+                        if target_grid[elem[0]][elem[1]] in [1, 2, 3, 4] :
+                            if elem[0] != coorTemp[0][0] :
+                                keyDeux=0
+                                for elemDeux in coorTemp :
+                                    if elemDeux == [coorTemp[key][0] - 1, maxX] :
+                                        key = keyDeux
+                                        break
+                                    keyDeux += 1
+                                action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {0}'
+                                actions.append(action)
+                                break
+                            else :
+                                action = f'RECT {ro} {co} {coorTemp[key - 1][1]} {coorTemp[key - 1][0]} {0}'
+                                actions.append(action)
+                                key -= 1
+                                break
+                        elif coorTemp[len(coorTemp) - 1] == elem :
+                            action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {0}'
+                            actions.append(action)
+                            break
+                        key += 1
+
+                    keyLog = 0
+                    while keyLog <= key :
+                        if coorTemp[keyLog] not in coorNoir and target_grid[coorTemp[keyLog][0]][coorTemp[keyLog][1]] == 0 :
+                            coorNoir.append(coorTemp[keyLog])
+                        keyLog += 1
+                    
+            ro += 1
+        co += 1
+    
+    co = 0
+    for ligne in target_grid :
+        ro = 0
+        for _ in ligne :
+            if target_grid[co][ro] == 6 and len(actions) != 2000:
+                if [co, ro] not in coorRose :
+                    maxX = 0
+                    num = 0
+                    while ro + num != grid_width and target_grid[co][(ro + num)] not in [0, 1, 2, 3, 4]  :
+                        num += 1
+                    if num == 0 :
+                        maxX = ro + num
+                    else :
+                        maxX = ro + num - 1
+                    
+                    maxY = 0
+                    num = 0
+                    while co + num != grid_height and target_grid[co + num][(ro)] not in [0, 1, 2, 3, 4] :
+                        num += 1
+                    if num == 0 :
+                        maxY = co + num
+                    else :
+                        maxY = co + num - 1
+                    
+                    coorTemp = []
+                    testCo = co
+                    while testCo <= maxY :
+                        testRo = ro
+                        while testRo <= maxX :
+                            coorTemp.append([testCo, testRo])
+                            testRo += 1
+                        testCo += 1
+
+                    key = 0
+                    for elem in coorTemp :
+                        if target_grid[elem[0]][elem[1]] in [0, 1, 2, 3, 4] :
+                            if elem[0] != coorTemp[0][0] :
+                                keyDeux=0
+                                for elemDeux in coorTemp :
+                                    if elemDeux == [coorTemp[key][0] - 1, maxX] :
+                                        key = keyDeux
+                                        break
+                                    keyDeux += 1
+                                action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {6}'
+                                actions.append(action)
+                                break
+                            else :
+                                action = f'RECT {ro} {co} {coorTemp[key - 1][1]} {coorTemp[key - 1][0]} {6}'
+                                actions.append(action)
+                                key -= 1
+                                break
+                        elif coorTemp[len(coorTemp) - 1] == elem :
+                            action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {6}'
+                            actions.append(action)
+                            break
+                        key += 1
+
+                    keyLog = 0
+                    while keyLog <= key :
+                        if coorTemp[keyLog] not in coorRose and target_grid[coorTemp[keyLog][0]][coorTemp[keyLog][1]] == 6 :
+                            coorRose.append(coorTemp[keyLog])
+                        keyLog += 1
+                    
+            ro += 1
+        co += 1
+
+        co = 0
+    for ligne in target_grid :
+        ro = 0
+        for _ in ligne :
+            if target_grid[co][ro] == 5 and len(actions) != 2000:
+                if [co, ro] not in coorJaune :
+                    maxX = 0
+                    num = 0
+                    while ro + num != grid_width and target_grid[co][(ro + num)] not in [0, 1, 2, 3, 4, 6]  :
+                        num += 1
+                    if num == 0 :
+                        maxX = ro + num
+                    else :
+                        maxX = ro + num - 1
+                    
+                    maxY = 0
+                    num = 0
+                    while co + num != grid_height and target_grid[co + num][(ro)] not in [0, 1, 2, 3, 4, 6] :
+                        num += 1
+                    if num == 0 :
+                        maxY = co + num
+                    else :
+                        maxY = co + num - 1
+                    
+                    coorTemp = []
+                    testCo = co
+                    while testCo <= maxY :
+                        testRo = ro
+                        while testRo <= maxX :
+                            coorTemp.append([testCo, testRo])
+                            testRo += 1
+                        testCo += 1
+
+                    key = 0
+                    for elem in coorTemp :
+                        if target_grid[elem[0]][elem[1]] in [0, 1, 2, 3, 4, 6] :
+                            if elem[0] != coorTemp[0][0] :
+                                keyDeux=0
+                                for elemDeux in coorTemp :
+                                    if elemDeux == [coorTemp[key][0] - 1, maxX] :
+                                        key = keyDeux
+                                        break
+                                    keyDeux += 1
+                                action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {5}'
+                                actions.append(action)
+                                break
+                            else :
+                                action = f'RECT {ro} {co} {coorTemp[key - 1][1]} {coorTemp[key - 1][0]} {5}'
+                                actions.append(action)
+                                key -= 1
+                                break
+                        elif coorTemp[len(coorTemp) - 1] == elem :
+                            action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {5}'
+                            actions.append(action)
+                            break
+                        key += 1
+
+                    keyLog = 0
+                    while keyLog <= key :
+                        if coorTemp[keyLog] not in coorJaune and target_grid[coorTemp[keyLog][0]][coorTemp[keyLog][1]] == 5 :
+                            coorJaune.append(coorTemp[keyLog])
+                        keyLog += 1
+                    
+            ro += 1
+        co += 1
+
+    co = 0
+    for ligne in target_grid :
+        ro = 0
+        for _ in ligne :
+            if target_grid[co][ro] == 7 and len(actions) != 2000:
+                if [co, ro] not in coorOrange :
+                    maxX = 0
+                    num = 0
+                    while ro + num != grid_width and target_grid[co][(ro + num)] not in [0, 1, 2, 3, 4, 5, 6] :
+                        num += 1
+                    if num == 0 :
+                        maxX = ro + num
+                    else :
+                        maxX = ro + num - 1
+                    
+                    maxY = 0
+                    num = 0
+                    while co + num != grid_height and target_grid[co + num][(ro)] not in [0, 1, 2, 3, 4, 5, 6] :
+                        num += 1
+                    if num == 0 :
+                        maxY = co + num
+                    else :
+                        maxY = co + num - 1
+                    
+                    coorTemp = []
+                    testCo = co
+                    while testCo <= maxY :
+                        testRo = ro
+                        while testRo <= maxX :
+                            coorTemp.append([testCo, testRo])
+                            testRo += 1
+                        testCo += 1
+
+                    key = 0
+                    for elem in coorTemp :
+                        if target_grid[elem[0]][elem[1]] in [0, 1, 2, 3, 4, 5, 6] :
+                            if elem[0] != coorTemp[0][0] :
+                                keyDeux=0
+                                for elemDeux in coorTemp :
+                                    if elemDeux == [coorTemp[key][0] - 1, maxX] :
+                                        key = keyDeux
+                                        break
+                                    keyDeux += 1
+                                action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {7}'
+                                actions.append(action)
+                                break
+                            else :
+                                action = f'RECT {ro} {co} {coorTemp[key - 1][1]} {coorTemp[key - 1][0]} {7}'
+                                actions.append(action)
+                                key -= 1
+                                break
+                        elif coorTemp[len(coorTemp) - 1] == elem :
+                            action = f'RECT {ro} {co} {coorTemp[key][1]} {coorTemp[key][0]} {7}'
+                            actions.append(action)
+                            break
+                        key += 1
+
+                    keyLog = 0
+                    while keyLog <= key :
+                        if coorTemp[keyLog] not in coorOrange and target_grid[coorTemp[keyLog][0]][coorTemp[keyLog][1]] == 7 :
+                            coorOrange.append(coorTemp[keyLog])
+                        keyLog += 1
+                    
+            ro += 1
+        co += 1
 
     return "\n".join(actions)
 
@@ -105,4 +555,13 @@ if __name__ == '__main__':
         print('❌ Solution is invalid')
         print(f'Message: {message}')
 
+        save = input('Save solution? (y/n): ')
+        if save.lower() == 'y':
+            date = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+            file_name = f'solutions/{dataset_file}_{score}_{date}.txt'
 
+            with open(file_name, 'w') as f:
+                f.write(solution)
+            print('Solution saved')
+        else:
+            print('Solution not saved')
